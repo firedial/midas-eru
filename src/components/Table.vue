@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <span>sum: {{ amountSum }}</span>
     <table>
       <tr>
         <th>balance_id</th>
@@ -26,6 +27,11 @@
 <script>
 export default {
   name: 'Table',
-  props: ['balances']
+  props: ['balances'],
+  computed: {
+    amountSum: function () {
+      return this.balances.map(x => x.amount).reduce((a, b) => a + b, 0)
+    }
+  }
 }
 </script>

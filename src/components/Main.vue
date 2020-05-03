@@ -1,14 +1,41 @@
 <template>
   <div class="main">
     <div id="search">
-      aaa {{ queries }} <br/>
-      startDate: <input type="date" v-model="queries.startDate">
-      endDate: <input type="date" v-model="queries.endDate">
-      moveIgnore: <input type="checkbox" v-model="queries.moveIgnore">
+      <span>
+        aaa {{ queries }} <br/>
+        startDate: <input type="date" v-model="queries.startDate">
+        endDate: <input type="date" v-model="queries.endDate">
+        moveIgnore: <input type="checkbox" v-model="queries.moveIgnore">
+      </span>
+      <br/>
+      <span>
+        <input type="radio" value="none" v-model="queries.groupByDate">
+        <label for="none">none</label>
+        <input type="radio" value="day" v-model="queries.groupByDate">
+        <label for="day">day</label>
+        <input type="radio" value="month" v-model="queries.groupByDate">
+        <label for="month">month</label>
+        <input type="radio" value="year" v-model="queries.groupByDate">
+        <label for="year">year</label>
+        <input type="radio" value="fiscal_year" v-model="queries.groupByDate">
+        <label for="fiscal_year">fiscal_year</label>
+      </span>
+      <br/>
+      <span>
+        <input type="radio" value="none" v-model="queries.groupByCollection">
+        <label for="none">none</label>
+        <input type="radio" value="kind" v-model="queries.groupByCollection">
+        <label for="kind">kind</label>
+        <input type="radio" value="purpose" v-model="queries.groupByCollection">
+        <label for="purpose">purpose</label>
+        <input type="radio" value="place" v-model="queries.groupByCollection">
+        <label for="place">place</label>
+      </span>
       <button v-on:click="getBalances">get</button>
     </div>
     <div id="contents">
-      <balance-table v-bind:balances="balances"/>
+      <balance-table v-if="doGroupBy === false" v-bind:balances="balances"/>
+      <sum-table v-if="doGroupBy === true" v-bind:sums="balances"/>
     </div>
     <div id="attribute">
       <input type="radio" value="kind" v-model="targetAttributeList">
@@ -40,6 +67,7 @@
 <script>
 import axios from 'axios'
 import Table from '@/components/Table'
+import SumTable from '@/components/SumTable'
 export default {
   name: 'Main',
   data () {
@@ -55,15 +83,23 @@ export default {
         endDate: '',
         checkedKinds: [],
         checkedPurposes: [],
-        checkedPlaces: []
+        checkedPlaces: [],
+        groupByDate: 'none',
+        groupByCollection: 'none'
       }
     }
   },
   methods: {
     getBalances: function () {
-      axios
-        .get('http://localhost:8080/api/v1/balance/?' + this.query)
-        .then(response => (this.balances = response.data))
+      if (this.doGroupBy) {
+        axios
+          .get('http://localhost:8080/api/v1/sum/?' + this.query + '&' + this.groupByQuery)
+          .then(response => (this.balances = response.data))
+      } else {
+        axios
+          .get('http://localhost:8080/api/v1/balance/?' + this.query)
+          .then(response => (this.balances = response.data))
+      }
     },
     getCheckedAttributes: function () {
       if (this.targetAttributeList === 'kind') {
@@ -90,14 +126,24 @@ export default {
       if (this.queries['endDate'] !== '') {
         query += '&end=' + this.queries['endDate']
       }
-      if (this.queries['checkedKinds'] !== []) {
+      if (this.queries['checkedKinds'].length > 0) {
         query += '&' + this.queries['checkedKinds'].map(x => 'kind=' + x).join('&')
       }
-      if (this.queries['checkedPurposes'] !== []) {
+      if (this.queries['checkedPurposes'].length > 0) {
         query += '&' + this.queries['checkedPurposes'].map(x => 'purpose=' + x).join('&')
       }
-      if (this.queries['checkedPlaces'] !== []) {
+      if (this.queries['checkedPlaces'].length > 0) {
         query += '&' + this.queries['checkedPlaces'].map(x => 'place=' + x).join('&')
+      }
+      return query
+    },
+    groupByQuery: function () {
+      var query = '2=2'
+      if (this.queries['groupByDate'] !== 'none') {
+        query += '&groupByDate=' + this.queries['groupByDate']
+      }
+      if (this.queries['groupByCollection'] !== 'none') {
+        query += '&attributeName=' + this.queries['groupByCollection']
       }
       return query
     },
@@ -112,6 +158,12 @@ export default {
         return this.places
       }
       return []
+    },
+    doGroupBy: function () {
+      if (this.queries['groupByDate'] !== 'none' || this.queries['groupByCollection'] !== 'none') {
+        return true
+      }
+      return false
     }
   },
   mounted () {
@@ -126,7 +178,8 @@ export default {
       .then(response => (this.places = response.data))
   },
   components: {
-    'balance-table': Table
+    'balance-table': Table,
+    'sum-table': SumTable
   }
 }
 </script>
