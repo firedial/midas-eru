@@ -34,8 +34,9 @@
       <button v-on:click="getBalances">get</button>
     </div>
     <div id="contents">
-      <balance-table v-if="doGroupBy === false" v-bind:balances="balances"/>
-      <sum-table v-if="doGroupBy === true" v-bind:sums="balances"/>
+      <balance-table v-if="viewPanel === 'balanceTable' && doGroupBy === false" v-bind:balances="balances"/>
+      <sum-table v-if="viewPanel === 'sumTable' && doGroupBy === true" v-bind:sums="balances"/>
+      <min-test v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
     </div>
     <div id="attribute">
       <input type="radio" value="kind" v-model="targetAttributeList">
@@ -68,6 +69,7 @@
 import axios from 'axios'
 import Table from '@/components/Table'
 import SumTable from '@/components/SumTable'
+import MinTest from '@/components/MinTest'
 export default {
   name: 'Main',
   data () {
@@ -77,6 +79,7 @@ export default {
       purposes: [],
       places: [],
       targetAttributeList: 'kind',
+      viewPanel: 'horizontalBar',
       queries: {
         moveIgnore: false,
         startDate: '',
@@ -86,6 +89,32 @@ export default {
         checkedPlaces: [],
         groupByDate: 'none',
         groupByCollection: 'none'
+      },
+      chartData: {
+        labels: ['January', 'February', 'March', 'April', 'May'],
+        datasets: [
+          {
+            label: 'Sample1',
+            data: [28, 20, 30, 40, 50],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }
+        ]
       }
     }
   },
@@ -179,6 +208,7 @@ export default {
   },
   components: {
     'balance-table': Table,
+    'min-test': MinTest,
     'sum-table': SumTable
   }
 }
