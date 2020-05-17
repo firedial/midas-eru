@@ -34,10 +34,10 @@
       <button v-on:click="getBalances">get</button>
     </div>
     <div id="contents">
-      <balance-table v-if="viewPanel === 'balanceTable' && doGroupBy === false" v-bind:balances="balances"/>
-      <sum-table v-if="viewPanel === 'sumTable' && doGroupBy === true" v-bind:sums="balances"/>
-      <attribute-bar v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
-      <date-chart v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
+      <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
+      <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
+      <attribute-bar v-if="viewPanel === 'attributeBar'" v-bind:sumData="balances"/>
+      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="balances"/>
     </div>
     <div id="attribute">
       <input type="radio" value="kind" v-model="targetAttributeList">
@@ -81,7 +81,6 @@ export default {
       purposes: [],
       places: [],
       targetAttributeList: 'kind',
-      viewPanel: 'balanceTable',
       queries: {
         moveIgnore: false,
         startDate: '',
@@ -177,6 +176,15 @@ export default {
         query += '&attributeName=' + this.queries['groupByCollection']
       }
       return query
+    },
+    viewPanel: function () {
+      if (this.queries['groupByDate'] !== 'none') {
+        return 'dateChart'
+      }
+      if (this.queries['groupByCollection'] !== 'none') {
+        return 'attributeBar'
+      }
+      return 'balanceTable'
     },
     attributes: function () {
       if (this.targetAttributeList === 'kind') {
