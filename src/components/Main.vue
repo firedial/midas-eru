@@ -36,6 +36,7 @@
     <div id="contents">
       <balance-table v-if="viewPanel === 'balanceTable' && doGroupBy === false" v-bind:balances="balances"/>
       <sum-table v-if="viewPanel === 'sumTable' && doGroupBy === true" v-bind:sums="balances"/>
+      <attribute-bar v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
       <date-chart v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
     </div>
     <div id="attribute">
@@ -67,9 +68,9 @@
 
 <script>
 import axios from 'axios'
-import Table from '@/components/Table'
+import BalanceTable from '@/components/BalanceTable'
 import SumTable from '@/components/SumTable'
-import MinTest from '@/components/MinTest'
+import AttributeBar from '@/components/AttributeBar'
 import DateChart from '@/components/DateChart'
 export default {
   name: 'Main',
@@ -80,7 +81,7 @@ export default {
       purposes: [],
       places: [],
       targetAttributeList: 'kind',
-      viewPanel: 'horizontalBar',
+      viewPanel: 'balanceTable',
       queries: {
         moveIgnore: false,
         startDate: '',
@@ -208,8 +209,8 @@ export default {
       .then(response => (this.places = response.data))
   },
   components: {
-    'balance-table': Table,
-    'min-test': MinTest,
+    'balance-table': BalanceTable,
+    'attribute-bar': AttributeBar,
     'date-chart': DateChart,
     'sum-table': SumTable
   }
