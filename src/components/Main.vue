@@ -36,7 +36,7 @@
     <div id="contents">
       <balance-table v-if="viewPanel === 'balanceTable' && doGroupBy === false" v-bind:balances="balances"/>
       <sum-table v-if="viewPanel === 'sumTable' && doGroupBy === true" v-bind:sums="balances"/>
-      <min-test v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
+      <date-chart v-if="viewPanel === 'horizontalBar'" v-bind:sumData="balances"/>
     </div>
     <div id="attribute">
       <input type="radio" value="kind" v-model="targetAttributeList">
@@ -70,6 +70,7 @@ import axios from 'axios'
 import Table from '@/components/Table'
 import SumTable from '@/components/SumTable'
 import MinTest from '@/components/MinTest'
+import DateChart from '@/components/DateChart'
 export default {
   name: 'Main',
   data () {
@@ -209,6 +210,7 @@ export default {
   components: {
     'balance-table': Table,
     'min-test': MinTest,
+    'date-chart': DateChart,
     'sum-table': SumTable
   }
 }
