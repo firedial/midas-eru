@@ -37,7 +37,7 @@
       <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
       <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
       <attribute-bar v-if="viewPanel === 'attributeBar'" v-bind:sumData="balances"/>
-      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="balances"/>
+      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="balances" v-bind:isCumulative="true"/>
     </div>
     <div id="attribute">
       <input type="radio" value="kind" v-model="targetAttributeList">

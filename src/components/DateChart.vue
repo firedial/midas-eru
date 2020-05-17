@@ -4,7 +4,7 @@ import { Line } from 'vue-chartjs'
 export default {
   extends: Line,
   name: 'chart',
-  props: ['sumData'],
+  props: ['sumData', 'isCumulative'],
   data () {
     return {
       options: {
@@ -26,7 +26,7 @@ export default {
         datasets: [
           {
             label: 'Bar Dataset',
-            data: this.sumData.map(x => x['amount_sum']),
+            data: this.doCumulate(),
             borderWidth: 1
           }
         ]
@@ -36,6 +36,23 @@ export default {
   watch: {
     data: function () {
       this.renderChart(this.data, this.options)
+    }
+  },
+  methods: {
+    doCumulate: function () {
+      if (this.isCumulative === false) {
+        return this.sumData.map(x => x['amount_sum'])
+      }
+
+      let len = this.sumData.length
+      let sum = 0
+      let s = []
+      for (let i = 0; i < len; i++) {
+        sum += this.sumData[i]['amount_sum']
+        s.push(sum)
+      }
+
+      return s
     }
   },
   mounted () {
