@@ -81,6 +81,7 @@ export default {
       purposes: [],
       places: [],
       targetAttributeList: 'kind',
+      viewPanel: 'none',
       queries: {
         moveIgnore: false,
         startDate: '',
@@ -95,6 +96,8 @@ export default {
   },
   methods: {
     getBalances: function () {
+      this.balances = []
+      this.changeViewPanel()
       if (this.doGroupBy) {
         axios
           .get('http://localhost:8080/api/v1/sum/?' + this.query + '&' + this.groupByQuery)
@@ -116,6 +119,15 @@ export default {
         return this.queries.checkedPlaces
       }
       return this.queries.checkedKinds
+    },
+    changeViewPanel: function () {
+      if (this.queries['groupByDate'] !== 'none') {
+        this.viewPanel = 'dateChart'
+      } else if (this.queries['groupByCollection'] !== 'none') {
+        this.viewPanel = 'attributeBar'
+      } else {
+        this.viewPanel = 'balanceTable'
+      }
     }
   },
   computed: {
@@ -150,15 +162,6 @@ export default {
         query += '&attributeName=' + this.queries['groupByCollection']
       }
       return query
-    },
-    viewPanel: function () {
-      if (this.queries['groupByDate'] !== 'none') {
-        return 'dateChart'
-      }
-      if (this.queries['groupByCollection'] !== 'none') {
-        return 'attributeBar'
-      }
-      return 'balanceTable'
     },
     attributes: function () {
       if (this.targetAttributeList === 'kind') {
