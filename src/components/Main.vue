@@ -1,10 +1,11 @@
 <template>
-  <div class="main">
+  <div id="main">
     <div id="search">
-      <span>
-        aaa {{ queries }} <br/>
+      <div id="dateRange">
         startDate: <input type="date" v-model="queries.startDate">
         endDate: <input type="date" v-model="queries.endDate">
+      </div>
+      <span>
         moveIgnore: <input type="checkbox" v-model="queries.moveIgnore">
       </span>
       <br/>
@@ -33,12 +34,6 @@
       </span>
       <button v-on:click="getBalances">get</button>
     </div>
-    <div id="contents">
-      <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
-      <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
-      <attribute-bar v-if="viewPanel === 'attributeBar'" v-bind:sumData="balances"/>
-      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="balances" v-bind:isCumulative="true"/>
-    </div>
     <div id="attribute">
       <input type="radio" value="kind" v-model="targetAttributeList">
       <label for="kind">kind</label>
@@ -62,6 +57,12 @@
           <td> {{ attribute.name }} </td>
         </tr>
       </table>
+    </div>
+    <div id="contents">
+      <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
+      <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
+      <attribute-bar v-if="viewPanel === 'attributeBar'" v-bind:sumData="balances"/>
+      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="balances" v-bind:isCumulative="true"/>
     </div>
   </div>
 </template>
@@ -203,6 +204,12 @@ export default {
 </script>
 
 <style scoped>
+#search {
+  background-color: #C4972F;
+}
+#attribute {
+  background-color: #C4972F;
+}
 #contents {
   float: left;
   width: 800px;
