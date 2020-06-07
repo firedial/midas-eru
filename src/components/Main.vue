@@ -14,6 +14,8 @@
         <label for="none">none</label>
         <input type="radio" value="day" v-model="queries.groupByDate">
         <label for="day">day</label>
+        <input type="radio" value="week" v-model="queries.groupByDate">
+        <label for="month">week</label>
         <input type="radio" value="month" v-model="queries.groupByDate">
         <label for="month">month</label>
         <input type="radio" value="year" v-model="queries.groupByDate">
