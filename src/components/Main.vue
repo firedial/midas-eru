@@ -207,10 +207,10 @@ export default {
 
 <style scoped>
 #search {
-  background-color: #C4972F;
+  background-color: #6ABC6E;
 }
 #attribute {
-  background-color: #C4972F;
+  background-color: #6ABC6E;
 }
 #contents {
   float: left;
