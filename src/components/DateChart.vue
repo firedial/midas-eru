@@ -22,14 +22,15 @@ export default {
   computed: {
     data: function () {
       return {
-        labels: this.sumData.map(x => x['date']),
-        datasets: [
-          {
-            label: 'Bar Dataset',
-            data: this.doCumulate(),
+        labels: this.sumData['label'],
+        datasets: this.sumData['data'].map(x => {
+          return {
+            label: x['name'],
+            data: x['value'],
             borderWidth: 1
           }
-        ]
+        }
+        )
       }
     }
   },

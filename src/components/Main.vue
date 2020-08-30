@@ -60,11 +60,12 @@
         </tr>
       </table>
     </div>
+    {{ this.sumData }}
     <div id="contents">
       <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
       <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
       <attribute-bar v-if="viewPanel === 'attributeBar'" v-bind:sumData="balances"/>
-      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="balances" v-bind:isCumulative="true"/>
+      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="sumData" v-bind:isCumulative="true"/>
     </div>
   </div>
 </template>
@@ -80,6 +81,7 @@ export default {
   data () {
     return {
       balances: [],
+      sumData: {'label': [], 'data': []},
       kinds: [],
       purposes: [],
       places: [],
@@ -103,8 +105,8 @@ export default {
       this.changeViewPanel()
       if (this.doGroupBy) {
         axios
-          .get('http://localhost:8080/api/v1/sum/?' + this.query + '&' + this.groupByQuery)
-          .then(response => (this.balances = response.data))
+          .get('http://localhost:8080/api/v1/chart/?' + this.query + '&' + this.groupByQuery)
+          .then(response => (this.sumData = response.data))
       } else {
         axios
           .get('http://localhost:8080/api/v1/balance/?' + this.query)
