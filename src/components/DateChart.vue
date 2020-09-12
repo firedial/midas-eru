@@ -25,7 +25,7 @@ export default {
         labels: this.sumData['label'],
         datasets: this.sumData['data'].map(x => {
           return {
-            label: x['name'],
+            label: x['id'],
             data: x['value'],
             borderWidth: 1
           }
