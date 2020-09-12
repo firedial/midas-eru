@@ -60,7 +60,6 @@
         </tr>
       </table>
     </div>
-    {{ this.sumData }}
     <div id="contents">
       <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
       <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
