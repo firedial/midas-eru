@@ -61,10 +61,10 @@
       </table>
     </div>
     <div id="contents">
-      <balance-table v-if="viewPanel === 'balanceTable'" v-bind:balances="balances"/>
-      <sum-table v-if="viewPanel === 'sumTable'" v-bind:sums="balances"/>
-      <attribute-bar v-if="viewPanel === 'attributeBar'" v-bind:sumData="balances"/>
-      <date-chart v-if="viewPanel === 'dateChart'" v-bind:sumData="sumData" v-bind:isCumulative="true"/>
+      <balance-table v-if="chartPanel === CHART_PANEL_NAME.BALANCE" v-bind:balances="balances"/>
+      <sum-table v-if="chartPanel === CHART_PANEL_NAME.ATTRIBUTE" v-bind:sums="balances"/>
+      <attribute-bar v-if="chartPanel === CHART_PANEL_NAME.ATTRIBUTE" v-bind:sumData="balances"/>
+      <date-chart v-if="chartPanel === CHART_PANEL_NAME.DATE" v-bind:sumData="sumData" v-bind:isCumulative="true"/>
     </div>
   </div>
 </template>
@@ -79,6 +79,11 @@ export default {
   name: 'Main',
   data () {
     return {
+      CHART_PANEL_NAME: {
+        BALANCE: 'balance',
+        ATTRIBUTE: 'attribute',
+        DATE: 'date'
+      },
       balances: [],
       sumData: {'label': [], 'data': []},
       kinds: [],
@@ -101,15 +106,20 @@ export default {
   methods: {
     getBalances: function () {
       this.balances = []
-      this.changeViewPanel()
-      if (this.doGroupBy) {
+      if (this.chartPanel === this.CHART_PANEL_NAME.DATE) {
         axios
           .get('http://localhost:8080/api/v1/chart/?' + this.query + '&' + this.groupByQuery)
           .then(response => (this.sumData = response.data))
-      } else {
+      } else if (this.chartPanel === this.CHART_PANEL_NAME.ATTRIBUTE) {
+        axios
+          .get('http://localhost:8080/api/v1/sum/?' + this.query + '&' + this.groupByQuery)
+          .then(response => (this.sumData = response.data))
+      } else if (this.chartPanel === this.CHART_PANEL_NAME.BALANCE) {
         axios
           .get('http://localhost:8080/api/v1/balance/?' + this.query)
           .then(response => (this.balances = response.data))
+      } else {
+        // ここには来ない想定
       }
     },
     getCheckedAttributes: function () {
@@ -123,15 +133,6 @@ export default {
         return this.queries.checkedPlaces
       }
       return this.queries.checkedKinds
-    },
-    changeViewPanel: function () {
-      if (this.queries['groupByDate'] !== 'none') {
-        this.viewPanel = 'dateChart'
-      } else if (this.queries['groupByCollection'] !== 'none') {
-        this.viewPanel = 'attributeBar'
-      } else {
-        this.viewPanel = 'balanceTable'
-      }
     }
   },
   computed: {
@@ -179,11 +180,15 @@ export default {
       }
       return []
     },
-    doGroupBy: function () {
-      if (this.queries['groupByDate'] !== 'none' || this.queries['groupByCollection'] !== 'none') {
-        return true
+    chartPanel: function () {
+      if (this.queries['groupByDate'] !== 'none') {
+        return this.CHART_PANEL_NAME.DATE
       }
-      return false
+      if (this.queries['groupByCollection'] !== 'none') {
+        return this.CHART_PANEL_NAME.ATTRIBUTE
+      }
+
+      return this.CHART_PANEL_NAME.BALANCE
     }
   },
   mounted () {
