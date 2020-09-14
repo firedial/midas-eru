@@ -61,6 +61,7 @@
       </table>
     </div>
     <div id="contents">
+      <!-- router-link :to="{ path: 'Main', query: this.queries}">search</router-link -->
       <balance-table v-if="chartPanel === CHART_PANEL_NAME.BALANCE" v-bind:balances="balances"/>
       <sum-table v-if="chartPanel === CHART_PANEL_NAME.ATTRIBUTE" v-bind:sums="balances"/>
       <attribute-bar v-if="chartPanel === CHART_PANEL_NAME.ATTRIBUTE" v-bind:sumData="balances"/>
