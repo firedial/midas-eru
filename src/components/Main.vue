@@ -60,6 +60,10 @@
         </tr>
       </table>
     </div>
+    <attribute-select-panel
+      :attributesCollections="attributesCollections"
+      :selectedAttributesElements="selectedAttributesElements"
+    />
     <div id="contents">
       <!-- router-link :to="{ path: 'Main', query: this.queries}">search</router-link -->
       <balance-table v-if="chartPanel === CHART_PANEL_NAME.BALANCE" v-bind:balances="balances"/>
@@ -76,6 +80,7 @@ import BalanceTable from '@/components/BalanceTable'
 import SumTable from '@/components/SumTable'
 import AttributeBar from '@/components/AttributeBar'
 import DateChart from '@/components/DateChart'
+import AttributeSelectPanel from '@/components/AttributeSelectPanel'
 export default {
   name: 'Main',
   data () {
@@ -190,6 +195,33 @@ export default {
       }
 
       return this.CHART_PANEL_NAME.BALANCE
+    },
+    attributesCollections: function () {
+      var kindCollections = {}
+      kindCollections['attributeElements'] = this.kinds
+      kindCollections['attributeCategories'] = []
+      kindCollections['attributeGroups'] = []
+
+      var purposeCollections = {}
+      purposeCollections['attributeElements'] = this.purposes
+      purposeCollections['attributeCategories'] = []
+      purposeCollections['attributeGroups'] = []
+
+      var placeCollections = {}
+      placeCollections['attributeElements'] = this.places
+      placeCollections['attributeCategories'] = []
+      placeCollections['attributeGroups'] = []
+
+      return {'kind': kindCollections, 'purpose': purposeCollections, 'place': placeCollections}
+    },
+    selectedAttributesElements: function () {
+      var selected = {}
+
+      selected['kinds'] = this.queries.checkedKInds
+      selected['purposes'] = this.queries.checkedKInds
+      selected['places'] = this.queries.checkedKInds
+
+      return selected
     }
   },
   mounted () {
@@ -207,7 +239,8 @@ export default {
     'balance-table': BalanceTable,
     'attribute-bar': AttributeBar,
     'date-chart': DateChart,
-    'sum-table': SumTable
+    'sum-table': SumTable,
+    'attribute-select-panel': AttributeSelectPanel
   }
 }
 </script>
