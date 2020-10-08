@@ -102,7 +102,7 @@ export default {
         moveIgnore: false,
         startDate: '',
         endDate: '',
-        checkedKinds: [1, 5, 4],
+        checkedKinds: [],
         checkedPurposes: [],
         checkedPlaces: [],
         groupByDate: 'none',
