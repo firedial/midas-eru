@@ -63,6 +63,7 @@
     <attribute-select-panel
       :attributesCollections="attributesCollections"
       :selectedAttributesElements="selectedAttributesElements"
+      @changeCheckbox="changeCheckbox"
     />
     <div id="contents">
       <!-- router-link :to="{ path: 'Main', query: this.queries}">search</router-link -->
@@ -101,7 +102,7 @@ export default {
         moveIgnore: false,
         startDate: '',
         endDate: '',
-        checkedKinds: [],
+        checkedKinds: [1, 5, 4],
         checkedPurposes: [],
         checkedPlaces: [],
         groupByDate: 'none',
@@ -139,6 +140,11 @@ export default {
         return this.queries.checkedPlaces
       }
       return this.queries.checkedKinds
+    },
+    changeCheckbox: function (selectedAttributesElements) {
+      this.queries.checkedKinds = selectedAttributesElements['kind']
+      this.queries.checkedPurposes = selectedAttributesElements['purpose']
+      this.queries.checkedPlaces = selectedAttributesElements['place']
     }
   },
   computed: {
@@ -217,9 +223,9 @@ export default {
     selectedAttributesElements: function () {
       var selected = {}
 
-      selected['kinds'] = this.queries.checkedKInds
-      selected['purposes'] = this.queries.checkedKInds
-      selected['places'] = this.queries.checkedKInds
+      selected['kind'] = this.queries.checkedKinds
+      selected['purpose'] = this.queries.checkedPurposes
+      selected['place'] = this.queries.checkedPlaces
 
       return selected
     }
