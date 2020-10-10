@@ -35,15 +35,15 @@ export default {
 
       if (this.selectedAttributeName === 'kind') {
         selected['kind'] = this.changeSelected(this.selectedAttributesElements['kind'], id)
-        selected['purpose'] = this.selectedAttributesElements['purposes']
+        selected['purpose'] = this.selectedAttributesElements['purpose']
         selected['place'] = this.selectedAttributesElements['place']
       } else if (this.selectedAttributeName === 'purpsoe') {
         selected['kind'] = this.selectedAttributesElements['kind']
-        selected['purpose'] = this.changeSelected(this.selectedAttributesElements['purposes'], id)
+        selected['purpose'] = this.changeSelected(this.selectedAttributesElements['purpose'], id)
         selected['place'] = this.selectedAttributesElements['place']
       } else if (this.selectedAttributeName === 'place') {
         selected['kind'] = this.selectedAttributesElements['kind']
-        selected['purpose'] = this.selectedAttributesElements['purposes']
+        selected['purpose'] = this.selectedAttributesElements['purpose']
         selected['place'] = this.changeSelected(this.selectedAttributesElements['place'], id)
       }
 
