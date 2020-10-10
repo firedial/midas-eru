@@ -1,5 +1,11 @@
 <template>
   <div>
+    <input type="radio" value="kind" v-model="selectedAttributeName">
+    <label for="kind">kind</label>
+    <input type="radio" value="purpose" v-model="selectedAttributeName">
+    <label for="purpose">purpose</label>
+    <input type="radio" value="place" v-model="selectedAttributeName">
+    <label for="place">place</label>
     <attribute-panel
       :attributeCollections="getAttributeCollections"
       :selectedAttributeElements="getSelectedAttributeElements"
@@ -37,7 +43,7 @@ export default {
         selected['kind'] = this.changeSelected(this.selectedAttributesElements['kind'], id)
         selected['purpose'] = this.selectedAttributesElements['purpose']
         selected['place'] = this.selectedAttributesElements['place']
-      } else if (this.selectedAttributeName === 'purpsoe') {
+      } else if (this.selectedAttributeName === 'purpose') {
         selected['kind'] = this.selectedAttributesElements['kind']
         selected['purpose'] = this.changeSelected(this.selectedAttributesElements['purpose'], id)
         selected['place'] = this.selectedAttributesElements['place']
