@@ -36,30 +36,6 @@
       </span>
       <button v-on:click="getBalances">get</button>
     </div>
-    <div id="attribute">
-      <input type="radio" value="kind" v-model="targetAttributeList">
-      <label for="kind">kind</label>
-      <input type="radio" value="purpose" v-model="targetAttributeList">
-      <label for="purpose">purpose</label>
-      <input type="radio" value="place" v-model="targetAttributeList">
-      <label for="place">place</label>
-      <table>
-        <tr>
-          <th></th>
-          <th>id</th>
-          <th>name</th>
-        </tr>
-        <tr v-for="attribute in attributes" v-bind:key="attribute.id">
-          <td>
-            <input v-if="targetAttributeList === 'kind'" type="checkbox" :value="attribute.id" v-model="queries.checkedKinds">
-            <input v-else-if="targetAttributeList === 'purpose'" type="checkbox" :value="attribute.id" v-model="queries.checkedPurposes">
-            <input v-else-if="targetAttributeList === 'place'" type="checkbox" :value="attribute.id" v-model="queries.checkedPlaces">
-          </td>
-          <td> {{ attribute.id }} </td>
-          <td> {{ attribute.name }} </td>
-        </tr>
-      </table>
-    </div>
     <attribute-select-panel
       :attributesCollections="attributesCollections"
       :selectedAttributesElements="selectedAttributesElements"
@@ -96,7 +72,6 @@ export default {
       kinds: [],
       purposes: [],
       places: [],
-      targetAttributeList: 'kind',
       viewPanel: 'none',
       queries: {
         moveIgnore: false,
@@ -128,18 +103,6 @@ export default {
       } else {
         // ここには来ない想定
       }
-    },
-    getCheckedAttributes: function () {
-      if (this.targetAttributeList === 'kind') {
-        return this.queries.checkedKinds
-      }
-      if (this.targetAttributeList === 'purpose') {
-        return this.queries.checkedPurposes
-      }
-      if (this.targetAttributeList === 'place') {
-        return this.queries.checkedPlaces
-      }
-      return this.queries.checkedKinds
     },
     changeCheckbox: function (selectedAttributesElements) {
       this.queries.checkedKinds = selectedAttributesElements['kind']
@@ -179,18 +142,6 @@ export default {
         query += '&attributeName=' + this.queries['groupByCollection']
       }
       return query
-    },
-    attributes: function () {
-      if (this.targetAttributeList === 'kind') {
-        return this.kinds
-      }
-      if (this.targetAttributeList === 'purpose') {
-        return this.purposes
-      }
-      if (this.targetAttributeList === 'place') {
-        return this.places
-      }
-      return []
     },
     chartPanel: function () {
       if (this.queries['groupByDate'] !== 'none') {
