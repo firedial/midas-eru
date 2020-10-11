@@ -35,6 +35,7 @@
         <label for="place">place</label>
       </span>
       <button v-on:click="getBalances">get</button>
+      <button v-on:click="search">search</button>
     </div>
     <attribute-select-panel
       :attributesCollections="attributesCollections"
@@ -104,6 +105,24 @@ export default {
         // ここには来ない想定
       }
     },
+    search: function () {
+      this.balances = []
+      if (this.chartPanel === this.CHART_PANEL_NAME.DATE) {
+        axios
+          .get('http://localhost:8080/api/v1/chart/', {params: this.getQueryParams})
+          .then(response => (this.sumData = response.data))
+      } else if (this.chartPanel === this.CHART_PANEL_NAME.ATTRIBUTE) {
+        axios
+          .get('http://localhost:8080/api/v1/sum/', {params: this.getQueryParams})
+          .then(response => (this.sumData = response.data))
+      } else if (this.chartPanel === this.CHART_PANEL_NAME.BALANCE) {
+        axios
+          .get('http://localhost:8080/api/v1/balance/', {params: this.getQueryParams})
+          .then(response => (this.balances = response.data))
+      } else {
+        // ここには来ない想定
+      }
+    },
     changeCheckbox: function (selectedAttributesElements) {
       this.queries.checkedKinds = selectedAttributesElements['kind']
       this.queries.checkedPurposes = selectedAttributesElements['purpose']
@@ -141,6 +160,34 @@ export default {
       if (this.queries['groupByCollection'] !== 'none') {
         query += '&attributeName=' + this.queries['groupByCollection']
       }
+      return query
+    },
+    getQueryParams: function () {
+      var query = {}
+
+      if (this.queries['moveIgnore'] === true) {
+        query['move'] = 'ignore'
+      }
+
+      if (this.queries['startDate'] !== '') {
+        query['start'] = this.queries['startDate']
+      }
+      if (this.queries['endDate'] !== '') {
+        query['end'] = this.queries['endDate']
+      }
+
+      query['kind'] = this.queries['checkedKinds']
+      query['purpose'] = this.queries['checkedPurposes']
+      query['place'] = this.queries['checkedPlaces']
+
+      if (this.queries['groupByDate'] !== 'none') {
+        query['groupByDate'] = this.queries['groupByDate']
+      }
+
+      if (this.queries['groupByCollection'] !== 'none') {
+        query['attributeName'] = this.queries['groupByCollection']
+      }
+
       return query
     },
     chartPanel: function () {
