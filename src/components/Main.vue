@@ -34,7 +34,6 @@
         <input type="radio" value="place" v-model="queries.groupByCollection">
         <label for="place">place</label>
       </span>
-      <button v-on:click="getBalances">get</button>
       <button v-on:click="search">search</button>
     </div>
     <attribute-select-panel
@@ -87,24 +86,6 @@ export default {
     }
   },
   methods: {
-    getBalances: function () {
-      this.balances = []
-      if (this.chartPanel === this.CHART_PANEL_NAME.DATE) {
-        axios
-          .get('http://localhost:8080/api/v1/chart/?' + this.query + '&' + this.groupByQuery)
-          .then(response => (this.sumData = response.data))
-      } else if (this.chartPanel === this.CHART_PANEL_NAME.ATTRIBUTE) {
-        axios
-          .get('http://localhost:8080/api/v1/sum/?' + this.query + '&' + this.groupByQuery)
-          .then(response => (this.sumData = response.data))
-      } else if (this.chartPanel === this.CHART_PANEL_NAME.BALANCE) {
-        axios
-          .get('http://localhost:8080/api/v1/balance/?' + this.query)
-          .then(response => (this.balances = response.data))
-      } else {
-        // ここには来ない想定
-      }
-    },
     search: function () {
       this.balances = []
       if (this.chartPanel === this.CHART_PANEL_NAME.DATE) {
@@ -130,38 +111,6 @@ export default {
     }
   },
   computed: {
-    query: function () {
-      var query = '1=1'
-      if (this.queries['moveIgnore'] === true) {
-        query += '&move=ignore'
-      }
-      if (this.queries['startDate'] !== '') {
-        query += '&start=' + this.queries['startDate'].replace(/-/g, '/')
-      }
-      if (this.queries['endDate'] !== '') {
-        query += '&end=' + this.queries['endDate']
-      }
-      if (this.queries['checkedKinds'].length > 0) {
-        query += '&' + this.queries['checkedKinds'].map(x => 'kind=' + x).join('&')
-      }
-      if (this.queries['checkedPurposes'].length > 0) {
-        query += '&' + this.queries['checkedPurposes'].map(x => 'purpose=' + x).join('&')
-      }
-      if (this.queries['checkedPlaces'].length > 0) {
-        query += '&' + this.queries['checkedPlaces'].map(x => 'place=' + x).join('&')
-      }
-      return query
-    },
-    groupByQuery: function () {
-      var query = '2=2'
-      if (this.queries['groupByDate'] !== 'none') {
-        query += '&groupByDate=' + this.queries['groupByDate']
-      }
-      if (this.queries['groupByCollection'] !== 'none') {
-        query += '&attributeName=' + this.queries['groupByCollection']
-      }
-      return query
-    },
     getQueryParams: function () {
       var query = {}
 
