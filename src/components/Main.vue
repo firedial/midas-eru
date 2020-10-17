@@ -35,12 +35,8 @@
         <label for="place">place</label>
       </span>
       <button v-on:click="search">search</button>
+      acs: <input type="checkbox" v-model="isAliavleAttributesSelect">
     </div>
-    <attribute-select-panel
-      :attributesCollections="attributesCollections"
-      :selectedAttributesElements="selectedAttributesElements"
-      @changeCheckbox="changeCheckbox"
-    />
     <div id="contents">
       <!-- router-link :to="{ path: 'Main', query: this.queries}">search</router-link -->
       <balance-table v-if="chartPanel === CHART_PANEL_NAME.BALANCE" v-bind:balances="balances"/>
@@ -48,6 +44,12 @@
       <attribute-bar v-if="chartPanel === CHART_PANEL_NAME.ATTRIBUTE" v-bind:sumData="balances"/>
       <date-chart v-if="chartPanel === CHART_PANEL_NAME.DATE" v-bind:sumData="sumData" v-bind:isCumulative="true"/>
     </div>
+    <attribute-select-panel
+      v-if="isAliavleAttributesSelect"
+      :attributesCollections="attributesCollections"
+      :selectedAttributesElements="selectedAttributesElements"
+      @changeCheckbox="changeCheckbox"
+    />
   </div>
 </template>
 
@@ -73,6 +75,7 @@ export default {
       purposes: [],
       places: [],
       viewPanel: 'none',
+      isAliavleAttributesSelect: false,
       queries: {
         moveIgnore: false,
         startDate: '',
