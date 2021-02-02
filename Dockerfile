@@ -12,12 +12,4 @@ COPY package*.json ./
 # プロジェクトの依存ライブラリをインストールする
 RUN npm install
 
-# カレントワーキングディレクトリ(つまり 'app' フォルダ)にプロジェクトのファイルやフォルダをコピーする
-COPY . .
-
-# 本番向けに圧縮しながらアプリケーションをビルドする
-RUN npm run build
-
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
-
+ENV HOST "0.0.0.0"
