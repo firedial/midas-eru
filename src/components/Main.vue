@@ -93,15 +93,15 @@ export default {
       this.balances = []
       if (this.chartPanel === this.CHART_PANEL_NAME.DATE) {
         axios
-          .get('http://localhost:8080/api/v1/chart/', {params: this.getQueryParams})
+          .get(process.env.API_URL + '/chart/', {params: this.getQueryParams})
           .then(response => (this.sumData = response.data))
       } else if (this.chartPanel === this.CHART_PANEL_NAME.ATTRIBUTE) {
         axios
-          .get('http://localhost:8080/api/v1/sum/', {params: this.getQueryParams})
+          .get(process.env.API_URL + '/sum/', {params: this.getQueryParams})
           .then(response => (this.sumData = response.data))
       } else if (this.chartPanel === this.CHART_PANEL_NAME.BALANCE) {
         axios
-          .get('http://localhost:8080/api/v1/balance/', {params: this.getQueryParams})
+          .get(process.env.API_URL + '/balance/', {params: this.getQueryParams})
           .then(response => (this.balances = response.data))
       } else {
         // ここには来ない想定
@@ -182,13 +182,13 @@ export default {
   },
   mounted () {
     axios
-      .get('http://localhost:8080/api/v1/kind/')
+      .get(process.env.API_URL + '/kind/')
       .then(response => (this.kinds = response.data))
     axios
-      .get('http://localhost:8080/api/v1/purpose/')
+      .get(process.env.API_URL + '/purpose/')
       .then(response => (this.purposes = response.data))
     axios
-      .get('http://localhost:8080/api/v1/place/')
+      .get(process.env.API_URL + '/place/')
       .then(response => (this.places = response.data))
   },
   components: {
