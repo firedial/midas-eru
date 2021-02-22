@@ -94,15 +94,15 @@ export default {
       if (this.chartPanel === this.CHART_PANEL_NAME.DATE) {
         axios
           .get(process.env.API_URL + '/chart/', {params: this.getQueryParams})
-          .then(response => (this.sumData = response.data))
+          .then(response => (this.sumData = response.data.data))
       } else if (this.chartPanel === this.CHART_PANEL_NAME.ATTRIBUTE) {
         axios
           .get(process.env.API_URL + '/sum/', {params: this.getQueryParams})
-          .then(response => (this.sumData = response.data))
+          .then(response => (this.sumData = response.data.data))
       } else if (this.chartPanel === this.CHART_PANEL_NAME.BALANCE) {
         axios
           .get(process.env.API_URL + '/balance/', {params: this.getQueryParams})
-          .then(response => (this.balances = response.data))
+          .then(response => (this.balances = response.data.data))
       } else {
         // ここには来ない想定
       }
@@ -182,14 +182,14 @@ export default {
   },
   mounted () {
     axios
-      .get(process.env.API_URL + '/kind/')
-      .then(response => (this.kinds = response.data))
+      .get(process.env.API_URL + '/kind_elements/')
+      .then(response => (this.kinds = response.data.data))
     axios
-      .get(process.env.API_URL + '/purpose/')
-      .then(response => (this.purposes = response.data))
+      .get(process.env.API_URL + '/purpose_elements/')
+      .then(response => (this.purposes = response.data.data))
     axios
-      .get(process.env.API_URL + '/place/')
-      .then(response => (this.places = response.data))
+      .get(process.env.API_URL + '/place_elements/')
+      .then(response => (this.places = response.data.data))
   },
   components: {
     'balance-table': BalanceTable,
