@@ -75,6 +75,7 @@ export default {
       purposes: [],
       places: [],
       viewPanel: 'none',
+      authToken: '',
       isAliavleAttributesSelect: false,
       queries: {
         moveIgnore: false,
@@ -181,14 +182,15 @@ export default {
     }
   },
   mounted () {
+    this.authToken = this.$cookies.get('auth_token')
     axios
-      .get(process.env.API_URL + '/kind_elements/')
+      .get(process.env.API_URL + '/kind_elements/', { headers: {'Authorization': 'Bearer ' + this.authToken} })
       .then(response => (this.kinds = response.data.data))
     axios
-      .get(process.env.API_URL + '/purpose_elements/')
+      .get(process.env.API_URL + '/purpose_elements/', { headers: {'Authorization': 'Bearer ' + this.authToken} })
       .then(response => (this.purposes = response.data.data))
     axios
-      .get(process.env.API_URL + '/place_elements/')
+      .get(process.env.API_URL + '/place_elements/', { headers: {'Authorization': 'Bearer ' + this.authToken} })
       .then(response => (this.places = response.data.data))
   },
   components: {
