@@ -99,7 +99,7 @@ export default {
       } else if (this.chartPanel === this.CHART_PANEL_NAME.ATTRIBUTE) {
         axios
           .get(process.env.API_URL + '/sum/', { params: this.getQueryParams, headers: {'Authorization': 'Bearer ' + this.authToken} })
-          .then(response => (this.sumData = response.data.data))
+          .then(response => (this.balances = response.data.data))
       } else if (this.chartPanel === this.CHART_PANEL_NAME.BALANCE) {
         axios
           .get(process.env.API_URL + '/balance/', { params: this.getQueryParams, headers: {'Authorization': 'Bearer ' + this.authToken} })
